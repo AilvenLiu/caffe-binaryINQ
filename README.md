@@ -11,9 +11,10 @@ Please cite Caffe in your publications if it helps your research:
     }
     
 And the version built with little of changes based on INQ:
+
     @inproceedings{zhou2017,
       title = {Incremental Network Quantization: Towards Lossless CNNs with Low-Precision Weights},
       author  = {Aojun Zhou, Anbang Yao, Yiwen Guo, Lin Xu, Yurong Chen},
       booktitle = {International Conference on Learning Representations,ICLR2017},
       year  = {2017}
-}
+    }
