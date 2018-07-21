@@ -9,39 +9,23 @@
 #include <cmath>
 using namespace std;
 #include "caffe/util/power2.hpp"
-#include "caffe/common.hpp"
 
 template< typename Dtype>
-Dtype weightCluster_zero( Dtype weight ){
-    if( weight > 0.0 && weight < 1.0)
-        weight *= 1.001;
-    else if( weight > 1.0 )
-        weight *= 0.999;
+double weightCluster_zero( Dtype weight, double m ){
+    if( weight > 0.0 && weight < m)
+        weight = pow( weight, 2 );
+    else if( weight >= m && weight < 1.0)
+        weight = sqrt( weight );
     else if( weight <= 0 )
-        weight *=0.999;
-    else if( abs( weight - 1.0 ) <= 1e-5 )
+        weight = -pow(weight, 2);
+    else if( abs( weight - 1.0 ) <= 1e-4 )
         weight = 1.0;
-    else if( abs( weight ) <= 1e-5 )
+    else if( abs( weight ) <= 1e-8 )
         weight = 0.0;
     return (Dtype)weight;
 }
 
-template< typename Dtype>
-void update_diff( int count, Dtype* diff, bool* mask ){
-    for( int i = 0; i < count; i ++ )
-        diff[ i] *= mask[ i];
-}
-
-template double weightCluster_zero<double>( double weight );
-template float weightCluster_zero<float>( float weight);
-template int weightCluster_zero<int>( int weight );
-template unsigned int weightCluster_zero<unsigned int>( unsigned int weight );
-
-template<> 
-void update_diff<double>( int count, double* diff, bool* mask);
-template<> 
-void update_diff<float>( int count, float* diff, bool* mask);
-template<>
-void update_diff<int>( int count, int* diff, bool* mask );
-template<>
-void update_diff<unsigned int>( int count, unsigned int* diff, bool* mask );
+template double weightCluster_zero<double>( double weight, double m);
+template double weightCluster_zero<float>( float weight, double m);
+template double weightCluster_zero<int>( int weight, double m );
+template double weightCluster_zero<unsigned int>( unsigned int weight, double m );
